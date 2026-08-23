@@ -1,11 +1,3 @@
-'use strict';
-
-/**
- * @param {Object} state
- * @param {Object[]} actions
- *
- * @return {Object[]}
- */
 function transformStateWithClones(state, actions) {
   const stateHistory = [];
   let currentState = { ...state };
@@ -20,11 +12,11 @@ function transformStateWithClones(state, actions) {
         break;
 
       case 'removeProperties':
-        currentState = { ...currentState };
-
-        for (const key of action.keysToRemove) {
-          delete currentState[key];
-        }
+        currentState = Object.fromEntries(
+          Object.entries(currentState).filter(
+            ([key]) => !action.keysToRemove.includes(key),
+          ),
+        );
         break;
 
       case 'clear':
@@ -42,4 +34,3 @@ function transformStateWithClones(state, actions) {
 }
 
 module.exports = transformStateWithClones;
-
